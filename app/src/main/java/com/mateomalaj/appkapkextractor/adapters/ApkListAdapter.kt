@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import android.text.format.Formatter
-import android.text.format.Formatter.formatFileSize
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,15 +20,14 @@ import com.mateomalaj.appkapkextractor.MainActivity
 import com.mateomalaj.appkapkextractor.R
 import com.mateomalaj.appkapkextractor.Tools
 import org.jetbrains.anko.find
-import org.w3c.dom.Text
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context): RecyclerView.Adapter<ApkListAdapter.ApkListViewHolder>() {
+class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context) : RecyclerView.Adapter<ApkListAdapter.ApkListViewHolder>() {
 
     var mItemClickListener: FunctionsOnMain? = null
+
     init {
         mItemClickListener = context as MainActivity
     }
@@ -64,7 +62,7 @@ class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context): Re
                 lastupdateString = changedate(lastupdate, "MM/dd/yyyy hh:mm:ss")
             } catch (e: PackageManager.NameNotFoundException) {
                 val installdate = Date(0)
-                lastupdateString= installdate.toString()
+                lastupdateString = installdate.toString()
             }
             return lastupdateString
         }
@@ -72,7 +70,7 @@ class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context): Re
 
         val apksizeinfo = context.packageManager.getApplicationInfo(apklist.get(position).packagename!!, 0)
         val apksizeLong = File(apksizeinfo.publicSourceDir).length()
-        val apksizeString = Formatter.formatFileSize(context,apksizeLong)
+        val apksizeString = Formatter.formatFileSize(context, apksizeLong)
         holder.apksize.setText(apksizeString)
     }
 
@@ -81,17 +79,14 @@ class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context): Re
     }
 
 
-
-
-
-    inner class ApkListViewHolder(view: View,context: Context,apkList: ArrayList<ApkModel>): RecyclerView.ViewHolder(view) {
+    inner class ApkListViewHolder(view: View, context: Context, apkList: ArrayList<ApkModel>) : RecyclerView.ViewHolder(view) {
         val appicon: ImageView = view.find(R.id.appicon_iv)
         val appname: TextView = view.find(R.id.appname_tv)
         val apppkg: TextView = view.find(R.id.apppkg_tv)
         val dropdownbtn: ImageView = view.find(R.id.dropdown_iv)
         val extractbtn: TextView = view.find(R.id.extract_tv)
         val sharebtn: TextView = view.find(R.id.share_tv)
-        val uninstallbtn: TextView = view.find(R.id.share_tv)
+        val uninstallbtn: TextView = view.find(R.id.uninstall_tv)
         val installdate: TextView = view.find(R.id.installdate_tv)
         val lastupdated: TextView = view.find(R.id.lastupdated_tv)
         val permissionsbtn: Button = view.find(R.id.permissions_btn)
@@ -102,7 +97,7 @@ class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context): Re
         val apksize: TextView = view.find(R.id.apksize)
 
         init {
-            extractbtn.setOnClickListener{
+            extractbtn.setOnClickListener {
                 if (Tools.checkPermission(context as MainActivity)) {
                     Tools.extractApk(apkList.get(adapterPosition))
                     val rootview: View = context.window.decorView.findViewById(android.R.id.content)
@@ -115,7 +110,7 @@ class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context): Re
                     context.startActivity(Intent.createChooser(intent, "Share Via"))
                 }
             }
-            uninstallbtn.setOnClickListener{
+            uninstallbtn.setOnClickListener {
                 val uninstallIntent = Intent(Intent.ACTION_UNINSTALL_PACKAGE)
                 uninstallIntent.data = Uri.parse("package:" + apkList[adapterPosition].packagename)
                 uninstallIntent.putExtra(Intent.EXTRA_RETURN_RESULT, true)
@@ -125,7 +120,7 @@ class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context): Re
                 cardview.visibility = View.VISIBLE
                 notifyDataSetChanged()
             }
-            appdetailsbtn.setOnClickListener{
+            appdetailsbtn.setOnClickListener {
                 val intent = Intent().apply {
                     setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                     addCategory(Intent.CATEGORY_DEFAULT)
@@ -146,7 +141,7 @@ class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context): Re
     }
 
     fun changedate(milliseconds: Long, format: String): String {
-        val formatter= SimpleDateFormat(format)
+        val formatter = SimpleDateFormat(format)
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = milliseconds
         return formatter.format(calendar.time)
@@ -155,6 +150,6 @@ class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context): Re
     interface FunctionsOnMain {
         fun launchandplay(thing: Int, who: String)
         fun uninstallApp(uri: Uri)
-        fun getpermissions(kush: String) : Array<String>
+        fun getpermissions(kush: String): Array<String>
     }
 }

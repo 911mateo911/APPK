@@ -10,11 +10,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Adapter
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.mateomalaj.appkapkextractor.adapters.ApkListAdapter
 import com.mateomalaj.appkapkextractor.adapters.FragmentAdapter
@@ -22,9 +19,6 @@ import com.mateomalaj.appkapkextractor.fragments.FragmentGoogleApps
 import com.mateomalaj.appkapkextractor.fragments.FragmentInstalledApps
 import com.mateomalaj.appkapkextractor.fragments.FragmentSystemApps
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_google_apps.*
-import kotlinx.android.synthetic.main.fragment_installed_apps.*
-import kotlinx.android.synthetic.main.fragment_system_apps.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import org.jetbrains.anko.uiThread
@@ -43,8 +37,9 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
         Tools.checkPermission(this)
         loadApk()
     }
+
     private fun setuptabs() {
-        val adapter =FragmentAdapter(supportFragmentManager)
+        val adapter = FragmentAdapter(supportFragmentManager)
         adapter.addfragment(FragmentInstalledApps(), "User Installed")
         adapter.addfragment(FragmentGoogleApps(), "Google")
         adapter.addfragment(FragmentSystemApps(), "System")
@@ -78,9 +73,9 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
                 }
             }
             uiThread {
-                val adapterinstalled = ApkListAdapter(apklistInstalled,MainActivity())
-                val adaptergoogle = ApkListAdapter(apklistGoogle,MainActivity())
-                val adaptersystem = ApkListAdapter(apklistSystem,MainActivity())
+                val adapterinstalled = ApkListAdapter(apklistInstalled, MainActivity())
+                val adaptergoogle = ApkListAdapter(apklistGoogle, MainActivity())
+                val adaptersystem = ApkListAdapter(apklistSystem, MainActivity())
                 adapterinstalled.notifyDataSetChanged()
                 adaptergoogle.notifyDataSetChanged()
                 adaptersystem.notifyDataSetChanged()
@@ -118,20 +113,21 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
         startActivity(uninstallIntent)
     }
 
-    override fun getpermissions(kush: String): Array<String>{
-        var tedhenat : Array<String>? = null
+    override fun getpermissions(kush: String): Array<String> {
+        var tedhenat: Array<String>? = null
         try {
             val pm = packageManager
             val p = pm.getPackageInfo(kush, PackageManager.GET_PERMISSIONS)
-            val permissions : Array<String> = p.requestedPermissions
+            val permissions: Array<String> = p.requestedPermissions
             tedhenat = permissions
-        } catch (e: Exception){}
+        } catch (e: Exception) {
+        }
         return tedhenat!!
     }
 
 
     override fun launchandplay(thing: Int, who: String) {
-        when(thing) {
+        when (thing) {
             R.id.launch_tv -> {
                 try {
                     startActivity(packageManager.getLaunchIntentForPackage(who))
