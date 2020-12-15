@@ -21,17 +21,34 @@ class Tools {
 
         fun checkPermission(activity: AppCompatActivity): Boolean {
             var permissionGranted = false
-            if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    val rootview: View = (activity as MainActivity).window.decorView.findViewById(android.R.id.content)
+            if (ContextCompat.checkSelfPermission(
+                    activity,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        activity,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
+                ) {
+                    val rootview: View =
+                        (activity as MainActivity).window.decorView.findViewById(android.R.id.content)
                     Snackbar.make(rootview, "Storage permission is required", Snackbar.LENGTH_LONG)
-                            .setAction("Allow") {
-                                ActivityCompat.requestPermissions(activity, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
-                            }
-                            .setActionTextColor(Color.WHITE)
-                            .show()
+                        .setAction("Allow") {
+                            ActivityCompat.requestPermissions(
+                                activity,
+                                arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                                STORAGE_PERMISSION_CODE
+                            )
+                        }
+                        .setActionTextColor(Color.WHITE)
+                        .show()
                 } else {
-                    ActivityCompat.requestPermissions(activity, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
+                    ActivityCompat.requestPermissions(
+                        activity,
+                        arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        STORAGE_PERMISSION_CODE
+                    )
                 }
             } else {
                 permissionGranted = true
@@ -46,7 +63,7 @@ class Tools {
         fun getappfolder(): File? {
             var file: File? = null
             if (checkStorage()) {
-                file = File(Environment.getExternalStorageDirectory(), "ApkExtractor")
+                file = File(Environment.getExternalStorageDirectory(), "APPK")
                 return file
             }
             return file
@@ -61,7 +78,6 @@ class Tools {
 
         fun extractApk(apk: ApkModel): Boolean {
             makeAppDirectory()
-
             var extracted = true
             val originalfile = File(apk.appinfo.sourceDir)
             val extractedfile = getApkFile(apk)
@@ -76,20 +92,10 @@ class Tools {
         }
 
         private fun getApkFile(apk: ApkModel): File {
-            var fileName = getappfolder()?.path + File.separator + apk.appname + "_" + apk.version + ".apk"
+            var fileName =
+                getappfolder()?.path + File.separator + apk.appname + "_" + apk.version + ".apk"
             return File(fileName)
         }
 
-        fun getShareableIntent(apk: ApkModel, context: Context): Intent {
-            extractApk(apk)
-            var file = getApkFile(apk)
-            var shareIntent = Intent().apply {
-                setAction(Intent.ACTION_SEND)
-                putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", file))
-                type = "application/vnd.android.package-archive"
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
-            return shareIntent
-        }
     }
 }

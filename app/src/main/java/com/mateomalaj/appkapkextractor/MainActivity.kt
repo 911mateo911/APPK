@@ -1,7 +1,6 @@
 package com.mateomalaj.appkapkextractor
 
 import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
@@ -12,13 +11,14 @@ import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import com.mateomalaj.appkapkextractor.adapters.ApkListAdapter
 import com.mateomalaj.appkapkextractor.adapters.FragmentAdapter
 import com.mateomalaj.appkapkextractor.fragments.FragmentGoogleApps
 import com.mateomalaj.appkapkextractor.fragments.FragmentInstalledApps
 import com.mateomalaj.appkapkextractor.fragments.FragmentSystemApps
-import kotlinx.android.synthetic.main.activity_main.*
+import nl.joery.animatedbottombar.AnimatedBottomBar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import org.jetbrains.anko.uiThread
@@ -40,11 +40,13 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
 
     private fun setuptabs() {
         val adapter = FragmentAdapter(supportFragmentManager)
-        adapter.addfragment(FragmentInstalledApps(), "User Installed")
-        adapter.addfragment(FragmentGoogleApps(), "Google")
-        adapter.addfragment(FragmentSystemApps(), "System")
+        adapter.addfragment(FragmentInstalledApps(),"User Installed")
+        adapter.addfragment(FragmentGoogleApps(),"Google")
+        adapter.addfragment(FragmentSystemApps(),"System")
+        val viewPager = find<ViewPager>(R.id.viewPager)
+        val bottombar = findViewById<AnimatedBottomBar>(R.id.bottombar)
         viewPager.adapter = adapter
-        tablayout.setViewPager(viewPager)
+        bottombar.setupWithViewPager(viewPager)
     }
 
     @SuppressLint("QueryPermissionsNeeded")
@@ -55,21 +57,21 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
             allpackages.forEach {
                 val applicationInfo: ApplicationInfo = it.applicationInfo
                 val userApk = ApkModel(
-                        applicationInfo,
-                        packageManager.getApplicationLabel(applicationInfo).toString(),
-                        it.packageName,
-                        it.versionName,
-                        it.firstInstallTime,
-                        it.lastUpdateTime
+                    applicationInfo,
+                    packageManager.getApplicationLabel(applicationInfo).toString(),
+                    it.packageName,
+                    it.versionName,
+                    it.firstInstallTime,
+                    it.lastUpdateTime
                 )
                 if ((applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0) {
-                    apklistSystem.add(userApk)
-                } else {
                     if (userApk.packagename!!.startsWith("com.google")) {
                         apklistGoogle.add(userApk)
                     } else {
-                        apklistInstalled.add(userApk)
+                        apklistSystem.add(userApk)
                     }
+                } else {
+                    apklistInstalled.add(userApk)
                 }
             }
             uiThread {
@@ -105,43 +107,16 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
         }
     }
 
-    override fun uninstallApp(uri: Uri) {
-        val uninstallIntent = Intent(Intent.ACTION_DELETE)
-        uninstallIntent.setData(uri)
-        Log.d("mainactivity", uri.toString())
-        uninstallIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(uninstallIntent)
-    }
-
     override fun getpermissions(kush: String): Array<String> {
-        var tedhenat: Array<String>? = null
-        try {
-            val pm = packageManager
-            val p = pm.getPackageInfo(kush, PackageManager.GET_PERMISSIONS)
-            val permissions: Array<String> = p.requestedPermissions
-            tedhenat = permissions
-        } catch (e: Exception) {
+        var permisionat: Array<String>
+        val pm = packageManager
+        val p = pm.getPackageInfo(kush, PackageManager.GET_PERMISSIONS)
+        val persat = p.requestedPermissions
+        if (persat != null) {
+            permisionat = persat
+        } else {
+            permisionat = arrayOf("No permissions Found")
         }
-        return tedhenat!!
-    }
-
-
-    override fun launchandplay(thing: Int, who: String) {
-        when (thing) {
-            R.id.launch_tv -> {
-                try {
-                    startActivity(packageManager.getLaunchIntentForPackage(who))
-                } catch (e: Exception) {
-                    Snackbar.make(find(android.R.id.content), "Cannot open this app", Snackbar.LENGTH_SHORT).show()
-                }
-            }
-            R.id.openplay_tv -> {
-                try {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$who")))
-                } catch (e: ActivityNotFoundException) {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$who")))
-                }
-            }
-        }
+        return permisionat
     }
 }

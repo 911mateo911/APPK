@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e8e8e8"
+    android:backgroundTint="#e8e8e8"
     tools:context=".MainActivity">
 
     <ProgressBar
@@ -16,31 +18,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
-    <com.flyco.tablayout.SlidingTabLayout
-        android:id="@+id/tablayout"
+    <nl.joery.animatedbottombar.AnimatedBottomBar
+        android:id="@+id/bottombar"
         android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:elevation="10dp"
+        android:layout_height="50dp"
+        android:background="#f4f4f4"
+        android:backgroundTint="#f4f4f4"
+        android:elevation="5dp"
+        app:abb_animationDuration="500"
+        app:abb_indicatorAnimation="slide"
+        app:abb_indicatorAppearance="round"
+        app:abb_indicatorHeight="4dp"
+        app:abb_indicatorMargin="16dp"
+        app:abb_rippleEnabled="false"
+        app:abb_selectedIndex="0"
+        app:abb_selectedTabType="text"
+        app:abb_tabAnimation="slide"
+        app:abb_tabAnimationSelected="slide"
+        app:abb_tabColor="#4CAF50"
+        app:abb_tabColorSelected="#EF233C"
+        app:abb_tabs="@menu/tabs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:tl_indicator_color="#ff6367"
-        app:tl_indicator_corner_radius="20dp"
-        app:tl_indicator_gravity="TOP"
-        app:tl_indicator_height="25dp"
-        app:tl_indicator_margin_bottom="10dp"
-        app:tl_indicator_margin_left="10dp"
-        app:tl_indicator_margin_right="10dp"
-        app:tl_indicator_margin_top="10dp"
-        app:tl_indicator_style="NORMAL"
-        app:tl_indicator_width_equal_title="false"
-        app:tl_textAllCaps="false"
-        app:tl_textBold="SELECT"
-        app:tl_textSelectColor="@color/white"
-        app:tl_textUnselectColor="#2b2b42"
-        app:tl_textsize="14sp"
-        app:tl_underline_color="#ef233c"
-        app:tl_underline_height="45dp" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
@@ -50,7 +50,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tablayout">
+        app:layout_constraintTop_toBottomOf="@+id/bottombar"
+        app:layout_constraintVertical_bias="0.0">
 
     </androidx.viewpager.widget.ViewPager>
 
@@ -59,7 +60,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:elevation="15dp"
+        android:elevation="10dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,7 +76,7 @@
         android:text="APPK Apk Extractor"
         android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/tablayout"
+        app:layout_constraintBottom_toTopOf="@+id/bottombar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
