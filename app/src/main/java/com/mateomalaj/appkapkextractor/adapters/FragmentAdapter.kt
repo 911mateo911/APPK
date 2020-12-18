@@ -25,4 +25,8 @@ class FragmentAdapter(supportFragmentManager: FragmentManager) : FragmentPagerAd
         mFragmentList.add(fragment)
         mFragmentTitleList.add(title)
     }
+    fun removeall() {
+        mFragmentList.clear()
+        mFragmentTitleList.clear()
+    }
 }

@@ -1,6 +1,7 @@
 package com.mateomalaj.appkapkextractor
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
@@ -10,6 +11,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
@@ -28,18 +31,15 @@ val apklistGoogle = ArrayList<ApkModel>()
 val apklistSystem = ArrayList<ApkModel>()
 
 class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
-    lateinit var progressbar: ProgressBar
-
+    val adapter = FragmentAdapter(supportFragmentManager)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        progressbar = find(R.id.progressBar)
         Tools.checkPermission(this)
         loadApk()
     }
 
     private fun setuptabs() {
-        val adapter = FragmentAdapter(supportFragmentManager)
         adapter.addfragment(FragmentInstalledApps(),"User Installed")
         adapter.addfragment(FragmentGoogleApps(),"Google")
         adapter.addfragment(FragmentSystemApps(),"System")
@@ -51,7 +51,11 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
 
     @SuppressLint("QueryPermissionsNeeded")
     fun loadApk() {
+        val progressbar = findViewById<ProgressBar>(R.id.progressBar)
         doAsync {
+            apklistGoogle.clear()
+            apklistInstalled.clear()
+            apklistSystem.clear()
             val allpackages: List<PackageInfo> =
                     packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
             allpackages.forEach {
@@ -75,12 +79,6 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
                 }
             }
             uiThread {
-                val adapterinstalled = ApkListAdapter(apklistInstalled, MainActivity())
-                val adaptergoogle = ApkListAdapter(apklistGoogle, MainActivity())
-                val adaptersystem = ApkListAdapter(apklistSystem, MainActivity())
-                adapterinstalled.notifyDataSetChanged()
-                adaptergoogle.notifyDataSetChanged()
-                adaptersystem.notifyDataSetChanged()
                 setuptabs()
                 progressbar.visibility = View.GONE
             }

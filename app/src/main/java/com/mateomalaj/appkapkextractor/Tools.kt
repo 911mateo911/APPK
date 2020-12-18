@@ -97,5 +97,17 @@ class Tools {
             return File(fileName)
         }
 
+        fun getShareableIntent(apk: ApkModel, context: Context): Intent {
+            extractApk(apk)
+            var file = getApkFile(apk)
+            var shareIntent = Intent().apply {
+                setAction(Intent.ACTION_SEND)
+                putExtra(Intent.EXTRA_STREAM,FileProvider.getUriForFile(context,context.applicationContext.packageName + ".provider",file))
+                type = "application/vnd.android.package-archive"
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            return shareIntent
+        }
+
     }
 }

@@ -1,6 +1,8 @@
 package com.mateomalaj.appkapkextractor.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import com.mateomalaj.appkapkextractor.apklistGoogle
 import org.jetbrains.anko.find
 
 class FragmentGoogleApps : Fragment() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -27,12 +30,11 @@ class FragmentGoogleApps : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyler: RecyclerView = view.find(R.id.recyclerviewGoogle)
-        val madapter = ApkListAdapter(apklistGoogle, context!!)
         val mlayout = LinearLayoutManager(context)
+        val recyler: RecyclerView = view.find(R.id.recyclerviewGoogle)
+        val googleadapter = ApkListAdapter(apklistGoogle, context!!)
         recyler.layoutManager = mlayout
-        recyler.adapter = madapter
-        recyler.invalidate()
-        recyler.scrollBy(0, 0)
+        recyler.adapter = googleadapter
+        googleadapter.notifyDataSetChanged()
     }
 }
