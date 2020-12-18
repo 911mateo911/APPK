@@ -17,7 +17,7 @@ import java.io.File
 
 class Tools {
     companion object {
-        val STORAGE_PERMISSION_CODE = 1008
+        const val STORAGE_PERMISSION_CODE = 1008
 
         fun checkPermission(activity: AppCompatActivity): Boolean {
             var permissionGranted = false

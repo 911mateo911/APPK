@@ -1,18 +1,12 @@
 package com.mateomalaj.appkapkextractor
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
@@ -26,19 +20,22 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
 import org.jetbrains.anko.uiThread
 
+// arraylistat e appeve
 val apklistInstalled = ArrayList<ApkModel>()
 val apklistGoogle = ArrayList<ApkModel>()
 val apklistSystem = ArrayList<ApkModel>()
 
 class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
-    val adapter = FragmentAdapter(supportFragmentManager)
+    private val adapter = FragmentAdapter(supportFragmentManager)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // kerkimi i permissionit
         Tools.checkPermission(this)
+        //gjetja e apkve dhe shtimi i fragmenteve
         loadApk()
     }
-
+    // funx i fragmenteve
     private fun setuptabs() {
         adapter.addfragment(FragmentInstalledApps(),"User Installed")
         adapter.addfragment(FragmentGoogleApps(),"Google")
@@ -49,8 +46,8 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
         bottombar.setupWithViewPager(viewPager)
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
-    fun loadApk() {
+    // funx i apkve kam perdorur ankon, librari tashme deprecated por super easy to do background tasks
+    private fun loadApk() {
         val progressbar = findViewById<ProgressBar>(R.id.progressBar)
         doAsync {
             apklistGoogle.clear()
@@ -85,6 +82,7 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
         }
     }
 
+    // pasi eshte dhene permissioni procedojme
     override fun onRequestPermissionsResult(
             requestCode: Int,
             permissions: Array<out String>,
@@ -105,8 +103,9 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
         }
     }
 
+    //ketu marr permissionat e aplikacioneve
     override fun getpermissions(kush: String): Array<String> {
-        var permisionat: Array<String>
+        val permisionat: Array<String>
         val pm = packageManager
         val p = pm.getPackageInfo(kush, PackageManager.GET_PERMISSIONS)
         val persat = p.requestedPermissions
