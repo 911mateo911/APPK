@@ -4,22 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mateomalaj.appkapkextractor.PackageAttributes
 import com.mateomalaj.appkapkextractor.R
 import com.mateomalaj.appkapkextractor.adapters.ApkListAdapter
-import com.mateomalaj.appkapkextractor.apklistGoogle
 import com.mateomalaj.appkapkextractor.apklistSystem
 import org.jetbrains.anko.find
 
 class FragmentSystemApps : Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +24,7 @@ class FragmentSystemApps : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyler: RecyclerView = view!!.find(R.id.recyclerviewsystem)
+        val recyler: RecyclerView = view.find(R.id.recyclerviewsystem)
         val mlayout = LinearLayoutManager(context)
         val systemadapter = ApkListAdapter(apklistSystem, context!!)
         recyler.layoutManager = mlayout

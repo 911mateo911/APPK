@@ -54,6 +54,9 @@ class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context) : R
         val appname: TextView = view.find(R.id.appname_tv)
         private val cardview: CardView = view.find(R.id.cardview)
 
+
+        // initializing setonclickun e cardviews qe te hap package attributin
+        // apk modelin e ke lart te variabla whichapp sepse nuk mund ta kalosh me putextra -_-
         init {
             cardview.setOnClickListener {
                 try {

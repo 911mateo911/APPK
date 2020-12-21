@@ -1,8 +1,6 @@
 package com.mateomalaj.appkapkextractor.fragments
 
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +13,6 @@ import com.mateomalaj.appkapkextractor.apklistGoogle
 import org.jetbrains.anko.find
 
 class FragmentGoogleApps : Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,

@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_userinstalled"
+        android:icon="@drawable/userinstalled"
+        android:title="User Installed" />
+    <item
+        android:id="@+id/tab_google"
+        android:icon="@drawable/google"
+        android:title="Google" />
+    <item
+        android:id="@+id/tab_system"
+        android:icon="@drawable/android"
+        android:title="System" />
+</menu>
