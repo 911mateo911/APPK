@@ -18,9 +18,7 @@ import com.mateomalaj.appkapkextractor.adapters.appig
 import com.mateomalaj.appkapkextractor.adapters.whichapp
 import layout.transitions.library.Slide
 import layout.transitions.library.Transitions
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
-import org.jetbrains.anko.uiThread
 import render.animations.Render
 import render.animations.Zoom
 import java.text.SimpleDateFormat
@@ -57,14 +55,14 @@ class PackageAttributes : AppCompatActivity() {
         val extracttext = find<TextView>(R.id.extracttext)
 
         // animations
-        animations(icon_iv, 300)
-        animations(name_tv, 320)
-        animations(pkg_tv, 340)
-        animations(uninstallbtn, 360)
-        animations(sharebtn, 360)
-        animations(appdetailsbtn, 380)
-        animations(permissions_btn, 400)
-        animations(openinplay, 420)
+        animations(icon_iv, 350)
+        animations(name_tv, 370)
+        animations(pkg_tv, 390)
+        animations(uninstallbtn, 410)
+        animations(sharebtn, 410)
+        animations(appdetailsbtn, 430)
+        animations(permissions_btn, 450)
+        animations(openinplay, 470)
 
         // initializing bundle from but extra
         val appname = b?.getString("appname")
