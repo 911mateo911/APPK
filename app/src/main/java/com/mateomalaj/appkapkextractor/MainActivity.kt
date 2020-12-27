@@ -1,10 +1,12 @@
 package com.mateomalaj.appkapkextractor
 
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
@@ -14,6 +16,8 @@ import com.mateomalaj.appkapkextractor.adapters.FragmentAdapter
 import com.mateomalaj.appkapkextractor.fragments.FragmentGoogleApps
 import com.mateomalaj.appkapkextractor.fragments.FragmentInstalledApps
 import com.mateomalaj.appkapkextractor.fragments.FragmentSystemApps
+import layout.transitions.library.Slide
+import layout.transitions.library.Transitions
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
@@ -29,8 +33,21 @@ class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // butoni help
+        val helpbtn = find<ImageView>(R.id.helpbtn)
+
+        // setonclicku
+        helpbtn.setOnClickListener {
+            val intent = Intent(this,Helpactivity()::class.java)
+            startActivity(intent)
+            val transitions = Transitions(this)
+            transitions.setAnimation(Slide().InRight())
+        }
+
         // kerkimi i permissionit
         Tools.checkPermission(this)
+
         //gjetja e apkve dhe shtimi i fragmenteve
         loadApk()
     }

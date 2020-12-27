@@ -71,13 +71,24 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:elevation="16dp"
         android:text="APPK Apk Extractor"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/bottombar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
+    <ImageView
+        android:id="@+id/helpbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:elevation="11dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="@+id/textView"
+        app:srcCompat="@drawable/question" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

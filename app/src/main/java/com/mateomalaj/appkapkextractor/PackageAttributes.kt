@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -14,22 +13,16 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.RecyclerView
-import com.github.razir.progressbutton.attachTextChangeAnimator
-import com.github.razir.progressbutton.bindProgressButton
-import com.github.razir.progressbutton.hideProgress
-import com.github.razir.progressbutton.showProgress
 import com.google.android.material.snackbar.Snackbar
-import com.mateomalaj.appkapkextractor.adapters.ApkListAdapter
 import com.mateomalaj.appkapkextractor.adapters.appig
 import com.mateomalaj.appkapkextractor.adapters.whichapp
-import com.mateomalaj.appkapkextractor.fragments.FragmentGoogleApps
-import com.mateomalaj.appkapkextractor.fragments.FragmentInstalledApps
-import com.mateomalaj.appkapkextractor.fragments.FragmentSystemApps
 import layout.transitions.library.Slide
 import layout.transitions.library.Transitions
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.find
-import render.animations.*
+import org.jetbrains.anko.uiThread
+import render.animations.Render
+import render.animations.Zoom
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -58,11 +51,10 @@ class PackageAttributes : AppCompatActivity() {
         val appdetailsbtn = find<CardView>(R.id.appdetailsbtn)
         val openinplay = find<CardView>(R.id.openplaybtn)
         val launchbtn = find<TextView>(R.id.launchbtn)
-        val extracttext = find<TextView>(R.id.extracttext)
+        val extractcard = find<CardView>(R.id.extractbtn)
         val backarrow = find<ImageView>(R.id.backarrow)
-
-        //from library to dont leak memory
-        bindProgressButton(extracttext)
+        val progressbar = find<ProgressBar>(R.id.progressBar3)
+        val extracttext = find<TextView>(R.id.extracttext)
 
         // animations
         animations(icon_iv, 300)
@@ -104,7 +96,7 @@ class PackageAttributes : AppCompatActivity() {
 
         backarrow.setOnClickListener {
             val transition = Transitions(this)
-            transition.setAnimation(Slide().InDown())
+            transition.setAnimation(Slide().InRight())
             if (ifdeleted() == true) {
                 apklistSystem.clear()
                 apklistGoogle.clear()
@@ -114,7 +106,7 @@ class PackageAttributes : AppCompatActivity() {
                 startActivity(intent)
             } else {
                 super.onBackPressed()
-                transition.setAnimation(Slide().InDown())
+                transition.setAnimation(Slide().InRight())
             }
         }
 
@@ -154,16 +146,14 @@ class PackageAttributes : AppCompatActivity() {
             startActivity(intent)
         }
 
-        extracttext.setOnClickListener {
+        extractcard.setOnClickListener {
             if (Tools.checkPermission(this)) {
-                extracttext.showProgress {
-                    buttonTextRes = R.string.exctracting
-                    progressColor = Color.WHITE
-                }
+                progressbar.visibility = View.VISIBLE
                 Tools.extractApk(whichapp)
                 val rootview: View = window.decorView.findViewById(android.R.id.content)
-                extracttext.hideProgress(R.string.extracted)
-                Snackbar.make(rootview, "Apk Extracted", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(rootview, "Apk Extracted to APPK folder", Snackbar.LENGTH_SHORT).show()
+                extracttext.text = "Extracted"
+                progressbar.visibility = View.GONE
             }
         }
 
@@ -255,7 +245,7 @@ class PackageAttributes : AppCompatActivity() {
     // go back with animation gjithashtu nqs eshte fshire i ben reload appit se notifydatasetchanged is nowhere to be found..E dua android studion <3
     override fun onBackPressed() {
         val transition = Transitions(this)
-        transition.setAnimation(Slide().InDown())
+        transition.setAnimation(Slide().InLeft())
         if (ifdeleted() == true) {
             apklistSystem.clear()
             apklistGoogle.clear()
@@ -265,7 +255,7 @@ class PackageAttributes : AppCompatActivity() {
             startActivity(intent)
         } else {
             super.onBackPressed()
-            transition.setAnimation(Slide().InDown())
+            transition.setAnimation(Slide().InLeft())
         }
     }
 }

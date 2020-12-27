@@ -2,6 +2,11 @@
     <string name="app_name">APPK apkextractor</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="exctracting">Extracting...</string>
+    <string name="exctracting">Extracting…</string>
     <string name="extracted">Extracted</string>
+    <string name="permissions">In this app you can also check for the installed app permissions just to be sure if anything suspicious happens.
+        To make the experience easier the apps are grouped in 3 categories, user installed, google and system apps. Unfortunately you can not uninstall
+google or system apps but you can disable them by clicking to the app settings button and proceeding in the settings.</string>
+    <string name="wheretofind">Also you can share it in-app or by going to the extraction folder which is named APPK in your files and find the apk there.</string>
+    <string name="Appk">APPK is an Apk extractor app that means you can share and save your apps (not saved data) in a Apk (Android application package) form.</string>
 </resources>

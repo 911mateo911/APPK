@@ -82,7 +82,7 @@ class ApkListAdapter(var apklist: ArrayList<ApkModel>, val context: Context) : R
                     }
                     context.startActivity(intent)
                     val transitions = Transitions(context)
-                    transitions.setAnimation(Slide().InUp())
+                    transitions.setAnimation(Slide().InRight())
                     val render = Render(context)
                     render.setAnimation(Attention().Pulse(cardview))
                     render.start()

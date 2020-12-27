@@ -4,20 +4,28 @@
     package="com.mateomalaj.appkapkextractor">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.APPKApkextractor">
-        <activity android:name=".PackageAttributes"></activity>
+        <activity android:name=".Helpactivity"></activity>
+        <activity android:name=".PackageAttributes" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,11 +48,5 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.MAIN" />
-        </intent>
-    </queries>
 
 </manifest>
