@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Environment
 import android.util.Log
 import android.view.View
@@ -63,7 +64,11 @@ class Tools {
         fun getappfolder(): File? {
             var file: File? = null
             if (checkStorage()) {
-                file = File(Environment.getExternalStorageDirectory(), "APPK")
+                if (Build.VERSION.SDK_INT > 30){
+                    file = File("/storage/emulated/0/APPK")
+                } else {
+                    file = File(Environment.getExternalStorageDirectory(), "APPK")
+                }
                 return file
             }
             return file
