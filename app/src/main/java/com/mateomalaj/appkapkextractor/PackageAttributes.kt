@@ -13,6 +13,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.snackbar.Snackbar
 import com.mateomalaj.appkapkextractor.adapters.appig
 import com.mateomalaj.appkapkextractor.adapters.whichapp
@@ -29,9 +32,16 @@ var apackage = ""
 
 class PackageAttributes : AppCompatActivity() {
 
+    // inicializimi i interstitialit
+    private lateinit var interstitial: InterstitialAd
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_package_attributes)
+
+        // inicializimi i reklamave
+        MobileAds.initialize(this) {}
+        loadad()
 
         // getting intent bundle from put extra
         val b: Bundle? = intent.extras
@@ -146,17 +156,22 @@ class PackageAttributes : AppCompatActivity() {
 
         extractcard.setOnClickListener {
             if (Tools.checkPermission(this)) {
-                progressbar.visibility = View.VISIBLE
-                Tools.extractApk(whichapp)
-                val rootview: View = window.decorView.findViewById(android.R.id.content)
-                Snackbar.make(rootview, "Apk Extracted to APPK folder", Snackbar.LENGTH_SHORT).show()
-                extracttext.text = "Extracted"
-                progressbar.visibility = View.GONE
+                try {
+                    showad()
+                    progressbar.visibility = View.VISIBLE
+                    Tools.extractApk(whichapp)
+                    val rootview: View = window.decorView.findViewById(android.R.id.content)
+                    Snackbar.make(rootview, "Apk Extracted to APPK folder", Snackbar.LENGTH_SHORT).show()
+                    extracttext.text = "Extracted"
+                    progressbar.visibility = View.GONE
+                }catch (e: Exception) {
+                }
             }
         }
 
         sharebtn.setOnClickListener {
             if (Tools.checkPermission(this)) {
+                showad()
                 val intent = Tools.getShareableIntent(whichapp, this)
                 startActivity(Intent.createChooser(intent, "Share Via"))
             }
@@ -238,6 +253,23 @@ class PackageAttributes : AppCompatActivity() {
         } catch (e: PackageManager.NameNotFoundException) {
             true
         }
+    }
+
+    // funx i loadimit te reklames
+    fun loadad() {
+        interstitial = InterstitialAd(this)
+        interstitial.adUnitId = "ca-app-pub-3940256099942544/1033173712"
+        val adRequest = AdRequest.Builder().build()
+        interstitial.loadAd(adRequest)
+    }
+
+    // funx per te nxjer reklamen
+    fun showad() {
+        if (interstitial.isLoaded) {
+            interstitial.show()
+        }
+        // for loading an ad again to show next
+        loadad()
     }
 
     // go back with animation gjithashtu nqs eshte fshire i ben reload appit se notifydatasetchanged is nowhere to be found..E dua android studion <3

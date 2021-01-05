@@ -10,6 +10,9 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.snackbar.Snackbar
 import com.mateomalaj.appkapkextractor.adapters.ApkListAdapter
 import com.mateomalaj.appkapkextractor.adapters.FragmentAdapter
@@ -30,9 +33,18 @@ val apklistSystem = ArrayList<ApkModel>()
 
 class MainActivity : AppCompatActivity(), ApkListAdapter.FunctionsOnMain {
     private val adapter = FragmentAdapter(supportFragmentManager)
+    lateinit var mAdView : AdView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // finding adview banner in main dhe i jap idn e testimit
+
+        // inicializimi i adviews
+        MobileAds.initialize(this) {}
+        mAdView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
 
         // butoni help
         val helpbtn = find<ImageView>(R.id.helpbtn)
